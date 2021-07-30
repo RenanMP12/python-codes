@@ -1,21 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# # Libraries
-
-# In[1]:
-
-
+# Libraries
 import numpy as np
-# import numpy.ma as ma
 import matplotlib.pyplot as plt
 
 
-# # Coordinate matrix
-
-# In[2]:
-
-
+# Coordinate matrix
 # number of nodes
 nnos = 11
 # number of elements
@@ -27,18 +15,12 @@ coord[0][0] = 1
 
 # theta value
 theta = (np.pi/2)/(nnos-2)
-
 for i in range(0, nnos-1):
     coord[i + 1][0] = i + 2             # Node reference  
     coord[i + 1][1] = np.cos(theta*i)   # X coordinate
     coord[i + 1][2] = np.sin(theta*i)   # Y coordinate
 
-
-# # Plot 
-
-# In[3]:
-
-
+# Plot 
 fig = plt.figure()
 plt.xlim([0,1])
 plt.ylim([0,1])
@@ -46,12 +28,7 @@ plt.scatter(coord[:,1], coord[:,2], marker = '+', c = 'black', alpha = 0.85)
 plt.xlabel('x', fontsize = 'xx-large')
 plt.ylabel('y', fontsize = 'xx-large')
 
-
-# # Incidence matrix
-
-# In[4]:
-
-
+# Incidence matrix
 # incidence matrix pre-allocation
 inci = np.zeros((nel, 3))  
 
@@ -62,10 +39,6 @@ for i in range(0,nel):
     inci[i][1] = i + 2
     # second node
     inci[i][2] = i + 3
-
-
-# In[5]:
-
 
 fig, ax = plt.subplots()
 plt.xlim([0,1])
@@ -89,14 +62,8 @@ for i in range(0,nel):
         ax.fill(x, y,'k',alpha=0.3)
     else:
         ax.fill(x, y,'b',alpha=0.3)
-# ax.fill(coord[:,1], coord[:,2],'r',alpha=0.3)
 
-
-# # Area
-
-# In[6]:
-
-
+# Area
 # somatory
 A = 0 
 
@@ -124,16 +91,9 @@ for i in range(0,nel):
     
 # relative error
 error_Area = (np.pi/4 - A)/(np.pi/4)*100
-# display('Error = ',error_Area)
-
 print('Error = ', error_Area,'%')
 
-
-# # Centroid
-
-# In[7]:
-
-
+# Centroid
 centx = 0
 centy = 0
 
@@ -166,12 +126,7 @@ error_y = (exact_cent - Y)/exact_cent*100
 print('Error centroid X = ', error_x,'%')
 print('Error centroid Y = ', error_y,'%')
 
-
-# # Inertia moment
-
-# In[12]:
-
-
+# Inertia moment
 Ix = 0
 Iy = 0
 
@@ -198,16 +153,3 @@ erro_Iy = (Iexato-Iy)/Iexato*100
 
 print('Error inertia X = ', erro_Ix,'%')
 print('Error inertia Y = ', erro_Iy,'%')
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
