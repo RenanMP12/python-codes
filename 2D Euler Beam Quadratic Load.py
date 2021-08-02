@@ -1,21 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# # Libraries
-
-# In[1]:
-
-
+# Libraries
 import numpy as np
 import numpy.ma as ma
 import matplotlib.pyplot as plt
 
-
-# # Functions
-
-# In[2]:
-
-
+# Functions
 def gaussian_quadrature(n):
         # n: number of points
         # w: weight 
@@ -36,12 +24,7 @@ def gaussian_quadrature(n):
         
         return x, w
 
-
-# # Input data
-
-# In[3]:
-
-
+# Input data
 L = 1                             # Beam length    
 q = 100                           # load
 nel = 512                         # number of elements
@@ -54,24 +37,14 @@ coord = np.zeros((nnos, 3))       # coordinate matrix pre-allocation
 inci = np.zeros((nel, 6))         # incidence matrix pre-allocation
 f = np.zeros((2*nnos, 1))         # external load vector
 
-
-# # Coordinate matrix
-
-# In[4]:
-
-
+# Coordinate matrix
 for i in range(0, nnos):
     coord[i,0] = i + 1      # node number
     coord[i,1] = i*L/nel    # node position
     coord[i,2] = 0
 l = coord[1,1] - coord[0,1] # element length
 
-
-# # Incidence matrix
-
-# In[5]:
-
-
+# Incidence matrix
 for i in range(0, nel):   
     inci[i,0] = i + 1          # element number
     inci[i,1] = i + 1          # first node
@@ -80,12 +53,7 @@ for i in range(0, nel):
     inci[i,4] = coord[i+1,1]   # second node coordinate
     inci[i,5] = I              # inertia of beam section
 
-
-# # Boundary conditions
-
-# In[6]:
-
-
+# Boundary conditions
 #   bc=[node | degree of freedom | value]
 #
 #   Degree of freedom 1 --> y
@@ -93,12 +61,7 @@ for i in range(0, nel):
 
 bc = np.array([[1,1,0],[1,2,0]])
 
-
-# # Mask stiffness matrix
-
-# In[7]:
-
-
+# Mask stiffness matrix
 mask = np.zeros((2*nnos,2*nnos))
 for i in range(0, np.size(bc,0)):
     if bc[i,1] == 1:
@@ -109,12 +72,7 @@ mask = ma.masked_equal(mask, 1)
 mask = ma.mask_rowcols(mask)
 mask = (mask==False)
 
-
-# # Mask load vector
-
-# In[8]:
-
-
+# Mask load vector
 maskv = np.zeros(2*nnos)
 for i in range(0, np.size(bc,0)):
     if bc[i,1] == 1:
@@ -124,12 +82,7 @@ for i in range(0, np.size(bc,0)):
 maskv = ma.masked_equal(maskv, 1)
 maskv = (maskv==False)
 
-
-# #  Load vector
-
-# In[9]:
-
-
+#  Load vector
 #   F = [node | degree of freedom | value]
 #
 #   Degree of freedom 1 --> Fy
@@ -141,7 +94,6 @@ def Q(x, q, L):
 def phi(x, L):
     phi = np.array([[2*x**3/L**3 - 3*x**2/L**2 + 1], [x - 2*x**2/L + x**3/L**2], [3*x**2/L**2 - 2*x**3/L**3], [x**3/L**2 - x**2/L]])
     return phi
-
 
 n = 3
 x,w = gaussian_quadrature(n)
@@ -166,12 +118,7 @@ for i in range(nel):
     
     fg[[int(loc[0]),int(loc[1]),int(loc[2]),int(loc[3])]] = fg[[int(loc[0]),int(loc[1]),int(loc[2]),int(loc[3])]] + fe
 
-
-# # Global matrix assembly
-
-# In[10]:
-
-
+# Global matrix assembly
 for i in range(nel):
     node1 = inci[i,1] # first node element
     node2 = inci[i,2] # second node element
@@ -190,24 +137,14 @@ kg_aux = kg[mask.data]
 kg_aux = np.reshape(kg_aux, (2*nnos-np.size(bc,0), 2*nnos-np.size(bc,0)))
 f_aux  = fg[maskv.data]
 
-
-# # Displacement
-
-# In[11]:
-
-
+# Displacement
 u = np.zeros((2*nnos, 1))
 u[maskv.data] = np.linalg.solve(kg_aux, f_aux)
 u_ = np.reshape(u,(nnos,2))
 displacement = u_[:,0]
 rotation = u_[:,1]
 
-
-# # Post-processing
-
-# In[13]:
-
-
+# Post-processing
 coord[:,2] = displacement
 fig, ax = plt.subplots(figsize = (12, 7))
 
@@ -215,10 +152,3 @@ plt.plot(coord[:,1],coord[:,2])
 plt.xlim([0,1])
 plt.grid(b=True, which='major', color='k', linestyle='--')
 fig.savefig('fem_lista_2_Q4.png',dpi=300)                              # save figure as png (dpi = number of pixels)
-
-
-# In[ ]:
-
-
-
-
