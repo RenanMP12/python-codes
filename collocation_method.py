@@ -1,18 +1,7 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 # LIBRARIES
 from sympy import *
 import numpy as np
 import matplotlib.pyplot as plt
-get_ipython().run_line_magic('matplotlib', 'inline')
-
-
-# In[2]:
-
 
 # COLLOCATION METHOD
 ## SYMBOLS
@@ -48,10 +37,6 @@ display(y2)
 print("y(0) = 0: ", y_.subs(x,0).simplify() == 0)
 print("dy(1) = 1: ", dy_.subs(x,1).simplify() == 1)
 
-
-# In[3]:
-
-
 # EXACT SOLUTION
 x = Symbol('x')
 f = Function('f')(x)
@@ -62,15 +47,8 @@ display(ode)
 fsol = dsolve(ode, f, ics = ics)
 fsol.simplify()
 
-
-# In[4]:
-
-
+# POLYNOMIAL - EXACT SOLUTION
 f = x**2 - sin(x)/cos(1) + 2*sin(x)*tan(1) + 2*cos(x) - 2
-
-
-# In[7]:
-
 
 # PLOT 
 fig, ax = plt.subplots(figsize = (12, 7))
@@ -96,10 +74,3 @@ plt.legend(["$Exact \, Solution$","$Collocation \, method$"])
 plt.grid()
 plt.show()
 fig.savefig('Lista01_Q8a.png',dpi=300)  # save figure as png (dpi = number of pixels)
-
-
-# In[ ]:
-
-
-
-
