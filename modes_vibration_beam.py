@@ -1,17 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
+# Libraries
 import numpy as np
 import numpy.ma as ma
 from scipy import linalg
 np.set_printoptions(precision=3)
-
-
-# In[2]:
-
 
 nel    = 1
 nnos   = nel + 1
@@ -22,26 +13,14 @@ m  = np.zeros((2*nnos,2*nnos))    # global stiffness matrix pre-allocation
 coord = np.zeros((nnos, 2))       # coordinate matrix pre-allocation
 inci = np.zeros((nel, 5))         # incidence matrix pre-allocation
 
-
-# In[3]:
-
-
 for i in range(0, nnos):
     coord[i,0] = i + 1           # node number
     coord[i,1] = i*L/(nnos-1)    # node position
-
-
-# In[4]:
-
 
 for i in range(0, nel):   
     inci[i,0] = i + 1          # element number
     inci[i,1] = i + 1          # first node
     inci[i,2] = i + 2          # second node
-
-
-# In[5]:
-
 
 # Material properties
 E  = 70e9
@@ -62,10 +41,6 @@ l = L/nel
 
 bc = np.array([[1,1,0],[1,2,0]])
 
-
-# In[6]:
-
-
 mask = np.zeros((2*nnos,2*nnos))
 for i in range(0, np.size(bc,0)):
     if bc[i,1] == 1:
@@ -76,12 +51,7 @@ mask = ma.masked_equal(mask, 1)
 mask = ma.mask_rowcols(mask)
 mask = (mask==False)
 
-
-# # Massa consistente
-
-# In[7]:
-
-
+# Consistent mass matrix
 for i in range(nel):
     node1 = inci[i,1] # first node element
     node2 = inci[i,2] # second node element
@@ -111,42 +81,20 @@ m_ = np.reshape(m_, (2*nnos-np.size(bc,0), 2*nnos-np.size(bc,0)))
 kf_ = kf[mask.data]
 kf_ = np.reshape(kf_, (2*nnos-np.size(bc,0), 2*nnos-np.size(bc,0)))
 
-
-# In[8]:
-
-
 w, v = linalg.eig(kf_, m_)
 
-
-# # 1 modo
-
-# In[9]:
-
-
+# First mode
 w = np.min(np.real(w))
 omega = np.sqrt(w)
 f = omega/2/np.pi
 print('omega = ' + str(format(omega, '.4f')) + ' rad/s')
 print('f = ' + str(format(f, '.4f')) + ' Hz')
 
-
-# In[10]:
-
-
 (1.875)**2*np.sqrt(E*inertia/ro/A)
 
-
-# # Massa concentrada
-
-# In[11]:
-
-
+# Lumped mass matrix
 kf = np.zeros((2*nnos,2*nnos))    # global stiffness matrix pre-allocation
 m  = np.zeros((2*nnos,2*nnos))    # global stiffness matrix pre-allocation
-
-
-# In[12]:
-
 
 for i in range(nel):
     node1 = inci[i,1] # first node element
@@ -177,19 +125,10 @@ m_ = np.reshape(m_, (2*nnos-np.size(bc,0), 2*nnos-np.size(bc,0)))
 kf_ = kf[mask.data]
 kf_ = np.reshape(kf_, (2*nnos-np.size(bc,0), 2*nnos-np.size(bc,0)))
 
-
-# In[13]:
-
-
 w, v = linalg.eig(kf_, m_)
-
-
-# In[14]:
-
 
 w = np.min(np.real(w))
 omega = np.sqrt(w)
 f = omega/2/np.pi
 print('omega = ' + str(format(omega, '.4f')) + ' rad/s')
 print('f = ' + str(format(f, '.4f')) + ' Hz')
-
