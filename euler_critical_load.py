@@ -1,17 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
+# Libraries
 import numpy as np
 import numpy.ma as ma
 from scipy import linalg
 np.set_printoptions(precision=2)
-
-
-# In[2]:
-
 
 nel    = 2
 nnos   = nel + 1
@@ -22,17 +13,9 @@ kg = np.zeros((2*nnos,2*nnos))    # global stiffness matrix pre-allocation
 coord = np.zeros((nnos, 2))       # coordinate matrix pre-allocation
 inci = np.zeros((nel, 5))         # incidence matrix pre-allocation
 
-
-# In[3]:
-
-
 for i in range(0, nnos):
     coord[i,0] = i + 1           # node number
     coord[i,1] = i*L/(nnos-1)    # node position
-
-
-# In[4]:
-
 
 for i in range(0, nel):   
     inci[i,0] = i + 1          # element number
@@ -40,10 +23,6 @@ for i in range(0, nel):
     inci[i,2] = i + 2          # second node
     inci[i,3] = coord[i,1]     # first node coordinate
     inci[i,4] = coord[i+1,1]   # second node coordinate
-
-
-# In[5]:
-
 
 # Material properties
 E = 200e9
@@ -68,10 +47,6 @@ geo = np.array([[D1, d1],[D2, d2]])
 
 bc = np.array([[1,1,0],[1,2,0]])
 
-
-# In[6]:
-
-
 mask = np.zeros((2*nnos,2*nnos))
 for i in range(0, np.size(bc,0)):
     if bc[i,1] == 1:
@@ -81,10 +56,6 @@ for i in range(0, np.size(bc,0)):
 mask = ma.masked_equal(mask, 1)
 mask = ma.mask_rowcols(mask)
 mask = (mask==False)
-
-
-# In[7]:
-
 
 for i in range(nel):
     node1 = inci[i,1] # first node element
@@ -119,18 +90,7 @@ kg_ = np.reshape(kg_, (2*nnos-np.size(bc,0), 2*nnos-np.size(bc,0)))
 kf_ = kf[mask.data]
 kf_ = np.reshape(kf_, (2*nnos-np.size(bc,0), 2*nnos-np.size(bc,0)))
 
-
-# In[8]:
-
-
 w, v = linalg.eig(kf_, kg_)
 Pcr = np.min(np.real(w))
 
 print('Pcr = ' + str(format(Pcr, '.2f')) + ' N')
-
-
-# In[ ]:
-
-
-
-
