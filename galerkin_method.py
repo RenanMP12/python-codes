@@ -1,17 +1,7 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 # Libraries
 from sympy import *
 import numpy as np
 import matplotlib.pyplot as plt
-
-
-# In[2]:
-
 
 # SYMBOLS
 x, y, C1, C2 = symbols('x y C1 C2')
@@ -46,10 +36,6 @@ ddy1 = ddy.subs([(C1,C1_), (C2,C2_)]).simplify()
 print("y(0) = 0: ", y1.subs(x,0).simplify() == 0)
 print("dy(1) = 1: ", dy1.subs(x,1).simplify() == 1)
 
-
-# In[7]:
-
-
 # EXACT SOLUTION
 x = Symbol('x')
 f = Function('f')(x)
@@ -60,15 +46,7 @@ display(ode)
 fsol = dsolve(ode, f, ics = ics)
 display(fsol.simplify())
 
-
-# In[4]:
-
-
 f = x**2 - sin(x)/cos(1) + 2*sin(x)*tan(1) + 2*cos(x) - 2
-
-
-# In[6]:
-
 
 # PLOT 
 fig, ax = plt.subplots(figsize = (12, 7))
@@ -93,10 +71,3 @@ plt.legend(["$Galerkin$", "$Exact \, solution$"])
 plt.grid()
 plt.show()
 fig.savefig('galerkin.png',dpi=300)        # save figure as png (dpi = number of pixels)
-
-
-# In[ ]:
-
-
-
-
