@@ -1,16 +1,6 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 # Libraries 
 import numpy as np
 import matplotlib.pyplot as plt
-
-
-# In[2]:
-
 
 # coordinate matrix
 # coord = [nº of node | X | Y] 
@@ -32,10 +22,6 @@ coord = np.array([[1,    0, 33.3],
 fig, ax = plt.subplots(figsize = (12, 7))
 plt.scatter(coord[:,1], coord[:,2])
 
-
-# In[3]:
-
-
 # incidence matrix
 # inci=[nº of element| node 1 | node 2 | node 3 | node 4 ] 
 inci = np.array([[1, 1, 4, 5, 2],
@@ -45,16 +31,8 @@ inci = np.array([[1, 1, 4, 5, 2],
                 [5, 7, 10, 9, 8],
              [6, 11, 14, 13, 12]])
 
-
-# In[4]:
-
-
 # pluviometer matrix
 u = np.array([4.62, 3.81, 4.76, 5.45, 4.90, 10.35, 4.96, 4.26, 18.36, 15.69])
-
-
-# In[5]:
-
 
 # plot element
 fig, ax = plt.subplots(figsize = (12, 7))
@@ -63,10 +41,6 @@ for i in range(np.size(inci,0)):
     y = [coord[inci[i,1] - 1,2], coord[inci[i,2] - 1,2], coord[inci[i,3] - 1,2], coord[inci[i,4] - 1,2], coord[inci[i,1] - 1,2]]
     ax.fill(x,y)
     ax.title.set_text('Title')
-
-
-# In[6]:
-
 
 # total area by analytical geometry
 A = 0 
@@ -87,10 +61,6 @@ for i in range(np.size(inci, 1)):
     A += a
     
 print('Total area ' + str(A) + ' km²')
-
-
-# In[9]:
-
 
 # total - rain
 Q = 0
@@ -116,10 +86,3 @@ for i in range(np.size(inci, 1)):
     Q += q
     
 print('Total rain ' + str(Q) + ' mm³')
-
-
-# In[ ]:
-
-
-
-
